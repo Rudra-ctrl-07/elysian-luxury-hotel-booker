@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Env files — commit only the template
+.env
+.env.*
+!.env.example
