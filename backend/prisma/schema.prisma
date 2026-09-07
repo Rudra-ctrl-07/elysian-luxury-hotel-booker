@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  firstName    String
+  lastName     String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  bookings     Booking[]
+  
+  @@map("users")
+}
+
+model Hotel {
+  id          Int      @id @default(autoincrement())
+  name        String
+  location    String
+  description String
+  rating      Float
+  image       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  rooms       Room[]
+  
+  @@map("hotels")
+}
+
+model Room {
+  id          Int      @id @default(autoincrement())
+  hotelId     Int
+  name        String
+  type        String   // Single, Double, Suite, Penthouse
+  price       Int      // Price in cents
+  amenities   String   // JSON string of amenities array
+  capacity    Int
+  isAvailable Boolean  @default(true)
+  image       String
+  size        Int      // Size in sqft
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  hotel       Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+  
+  @@map("rooms")
+}
+
+model Booking {
+  id              String   @id @default(cuid())
+  userId          String
+  roomId          Int
+  checkIn         DateTime
+  checkOut        DateTime
+  guests          Int
+  totalPrice      Int      // Price in cents
+  bookingDate     DateTime @default(now())
+  personalDetails String   // JSON string of personal details
+  paymentDetails  String   // JSON string of payment details
+  status          String   @default("confirmed") // confirmed, cancelled, completed
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room            Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  
+  @@map("bookings")
+}
+
+model Offer {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  discount    Int      // Percentage
+  validUntil  DateTime
+  image       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("offers")
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  name      String
+  location  String
+  comment   String
+  rating    Int
+  avatar    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("testimonials")
+}
