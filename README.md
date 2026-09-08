@@ -1,20 +1,56 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Elysian — Luxury Hotel Booker
 
-# Run and deploy your AI Studio app
+A luxury hotel booking web app with a full customer flow: browse hotels and rooms, view offers, sign up / log in, book a stay, and review booking history. Ships as two parts — a React SPA frontend and an Express + Prisma backend — with internationalization (English/Spanish UI strings via `LanguageContext`).
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/14nwQ_3svgle5fZqGy-1Bcs_UZoL2fR-k
+- **10 routed pages** (HashRouter): Home, Rooms, Offers, About, Contact, Login, Signup, Profile, Booking, Booking History
+- **Protected routes** — booking, profile, and history require a logged-in user (`components/ProtectedRoute.tsx`)
+- **Auth** — client-side auth context (`contexts/AuthContext.tsx`) with login/signup/logout and session restore on load
+- **Hotel data** — mock catalog in `data/mockData.ts` (Elysian Grand NY, Elysian Palace Paris, Elysian Sands Maldives, …) with rooms, offers, testimonials
+- **Backend** (`backend/`) — Express + Prisma (SQLite) API with JWT auth, hotels/rooms/bookings/offers/testimonials routes, availability checking, Joi validation, rate limiting. Has been run locally (`dev.db` present)
 
-## Run Locally
+## Tech stack
 
-**Prerequisites:**  Node.js
+- **Frontend:** React 19, TypeScript, Vite, Tailwind, react-router-dom
+- **Backend:** Express, TypeScript, Prisma (SQLite), JWT, bcryptjs, Joi, Helmet, CORS, rate limiting
 
+## Run locally
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Frontend
+
+```bash
+npm install
+npm run dev
+```
+
+### Backend (optional — frontend currently runs on mock data)
+
+```bash
+cd backend
+npm install
+cp env.example .env
+npm run migrate     # prisma migrate dev — creates/updates dev.db
+npm run seed        # seed hotels/rooms
+npm run dev         # API server
+```
+
+See `backend/README.md` for the full endpoint list.
+
+## Project structure
+
+```
+├── App.tsx                # Router + Auth/Language providers
+├── pages/                 # 10 page components
+├── components/            # Header, Footer, ProtectedRoute, …
+├── contexts/              # AuthContext, LanguageContext
+├── data/mockData.ts       # Hotels, rooms, offers, testimonials
+├── utils/                 # auth helpers
+└── backend/               # Express + Prisma API (own README)
+```
+
+## Status / known limitations
+
+- The frontend currently renders mock data; wiring the pages to the backend API is the main remaining step
+- Auth state is client-side only in the frontend (the backend has its own JWT flow, not yet connected)
+- No tests on either side; not deployed
