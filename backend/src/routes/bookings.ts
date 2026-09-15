@@ -287,6 +287,9 @@ router.patch('/:id', authenticateToken, async (req: any, res) => {
         id,
         userId,
         status: 'confirmed',
+      },
+      include: {
+        room: true,
       }
     });
 
