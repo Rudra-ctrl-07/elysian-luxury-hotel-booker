@@ -1,5 +1,7 @@
 # Elysian — Luxury Hotel Booker
 
+[![CI](https://github.com/Rudra-ctrl-07/elysian-luxury-hotel-booker/actions/workflows/ci.yml/badge.svg)](https://github.com/Rudra-ctrl-07/elysian-luxury-hotel-booker/actions/workflows/ci.yml)
+
 A luxury hotel booking web app with a full customer flow: browse hotels and rooms, view offers, sign up / log in, book a stay, and review booking history. Ships as two parts — a React SPA frontend and an Express + Prisma backend — with internationalization (English/Spanish UI strings via `LanguageContext`).
 
 ## Features
